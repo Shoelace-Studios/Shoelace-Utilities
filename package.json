@@ -1,6 +1,6 @@
 {
   "name": "ca.shoelacestudios.utilities",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "displayName": "Shoelace Dev Utilities",
   "description": "A collection of third party and in-house scripts and extensions that improve the development process for the Shoelace Dev team",
   "unity": "2022.1",

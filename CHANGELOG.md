@@ -1,3 +1,6 @@
+## \[1.6.2] - 2026-04-07
+### Fixed Build Errors by Culling Editor Code from builds
+
 ## \[1.6.1] - 2026-02-06
 
 ### Added Serialization to interfaces

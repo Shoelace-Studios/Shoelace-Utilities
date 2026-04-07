@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 namespace ShoelaceStudios.Utilities.SerializeInterfaces
@@ -45,3 +46,4 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
         }
     }
 }
+#endif
