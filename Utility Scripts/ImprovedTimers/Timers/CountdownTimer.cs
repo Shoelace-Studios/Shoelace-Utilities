@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace ImprovedTimers
+namespace ShoelaceStudios.ImprovedTimers.Timers
 {
     /// <summary>
     /// Timer that counts down from a specific value to zero.

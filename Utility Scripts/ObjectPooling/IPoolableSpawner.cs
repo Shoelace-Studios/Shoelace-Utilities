@@ -1,4 +1,4 @@
-namespace ShoelaceStudios
+namespace ShoelaceStudios.Utilities.ObjectPooling
 {
     public interface IPoolableSpawner
     {

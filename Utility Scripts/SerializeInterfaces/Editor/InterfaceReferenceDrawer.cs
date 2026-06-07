@@ -3,27 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ShoelaceStudios.SerializeInterfaces;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using UnityEditor;
-namespace ShoelaceStudios.Utilities.SerializeInterfaces
+namespace ShoelaceStudios.Utilities.SerializeInterfaces.Editor
 {
-
-    
     [CustomPropertyDrawer(typeof(InterfaceReference<>))]
     [CustomPropertyDrawer(typeof(InterfaceReference<,>))]
     public class InterfaceReferenceDrawer : PropertyDrawer
     {
-        const string UnderlyingValueFieldName = "underlyingValue";
+        private const string UNDERLYING_VALUE_FIELD_NAME = "underlyingValue";
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var underlyingProperty = property.FindPropertyRelative(UnderlyingValueFieldName);
-            var args = GetArguments(fieldInfo);
+            SerializedProperty underlyingProperty = property.FindPropertyRelative(UNDERLYING_VALUE_FIELD_NAME);
+            InterfaceArgs args = GetArguments(fieldInfo);
 
             EditorGUI.BeginProperty(position, label, property);
 
-            var assignedObject = EditorGUI.ObjectField(position, label, underlyingProperty.objectReferenceValue,
+            Object assignedObject = EditorGUI.ObjectField(position, label, underlyingProperty.objectReferenceValue,
                 args.ObjectType, true);
 
             if (assignedObject != null)
@@ -45,8 +44,7 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
                 }
                 else
                 {
-                    Debug.LogWarning(
-                        $"Assigned object does not implement required interface '{args.InterfaceType.Name}'.");
+                    Debug.LogWarning($"Assigned object does not implement required interface '{args.InterfaceType.Name}'.");
                     underlyingProperty.objectReferenceValue = null;
                 }
             }
@@ -60,7 +58,7 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             InterfaceReferenceUtil.OnGUI(position, underlyingProperty, label, args);
         }
 
-        static InterfaceArgs GetArguments(FieldInfo fieldInfo)
+        private static InterfaceArgs GetArguments(FieldInfo fieldInfo)
         {
             Type objectType = null, interfaceType = null;
             Type fieldType = fieldInfo.FieldType;
@@ -71,12 +69,12 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
 
                 if (type?.IsGenericType != true) return false;
 
-                var genericType = type.GetGenericTypeDefinition();
+                Type genericType = type.GetGenericTypeDefinition();
                 if (genericType == typeof(InterfaceReference<>)) type = type.BaseType;
 
                 if (type?.GetGenericTypeDefinition() == typeof(InterfaceReference<,>))
                 {
-                    var types = type.GetGenericArguments();
+                    Type[] types = type.GetGenericArguments();
                     intfType = types[0];
                     objType = types[1];
                     return true;
@@ -89,12 +87,12 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             {
                 objType = intfType = null;
 
-                var listInterface = type.GetInterfaces()
+                Type listInterface = type.GetInterfaces()
                     .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IList<>));
 
                 if (listInterface != null)
                 {
-                    var elementType = listInterface.GetGenericArguments()[0];
+                    Type elementType = listInterface.GetGenericArguments()[0];
                     TryGetTypesFromInterfaceReference(elementType, out objType, out intfType);
                 }
             }
@@ -107,7 +105,7 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             return new InterfaceArgs(objectType, interfaceType);
         }
 
-        static void ValidateAndAssignObject(SerializedProperty property, Object targetObject,
+        private static void ValidateAndAssignObject(SerializedProperty property, Object targetObject,
             string componentNameOrType, string interfaceName = null)
         {
             if (targetObject != null)
@@ -116,12 +114,9 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             }
             else
             {
-                var message = interfaceName != null
-                    ? $"GameObject '{componentNameOrType}'"
-                    : "assigned object";
+                string message = interfaceName != null ? $"GameObject '{componentNameOrType}'" : "assigned object";
 
-                Debug.LogWarning(
-                    $"The {message} does not have a component that implements '{interfaceName}'."
+                Debug.LogWarning($"The {message} does not have a component that implements '{interfaceName}'."
                 );
                 property.objectReferenceValue = null;
             }
@@ -143,6 +138,5 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             InterfaceType = interfaceType;
         }
     }
-    
 }
 #endif

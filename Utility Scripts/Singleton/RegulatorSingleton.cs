@@ -2,57 +2,57 @@
 
 namespace ShoelaceStudios.Utilities.Singleton
 {
-	/// <summary>
-	/// Persistent Regulator singleton, will destroy any other older components of the same type it finds on awake
-	/// </summary>
-	public class RegulatorSingleton<T> : MonoBehaviour where T : Component
-	{
-		protected static T instance;
+    /// <summary>
+    /// Persistent Regulator singleton, will destroy any other older components of the same type it finds on awake
+    /// </summary>
+    public class RegulatorSingleton<T> : MonoBehaviour where T : Component
+    {
+        protected static T instance;
 
-		public static bool HasInstance => instance != null;
+        public static bool HasInstance => instance != null;
 
-		public float InitializationTime { get; private set; }
+        public float InitializationTime { get; private set; }
 
-		public static T Instance
-		{
-			get
-			{
-				if (instance == null)
-				{
-					instance = FindAnyObjectByType<T>();
-					if (instance == null)
-					{
-						GameObject go = new(typeof(T).Name + " Auto-Generated");
-						go.hideFlags = HideFlags.HideAndDontSave;
-						instance = go.AddComponent<T>();
-					}
-				}
+        public static T Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindAnyObjectByType<T>();
+                    if (instance == null)
+                    {
+                        GameObject go = new(typeof(T).Name + " Auto-Generated");
+                        go.hideFlags = HideFlags.HideAndDontSave;
+                        instance = go.AddComponent<T>();
+                    }
+                }
 
-				return instance;
-			}
-		}
+                return instance;
+            }
+        }
 
-		/// <summary>
-		/// Make sure to call base.Awake() in override if you need awake.
-		/// </summary>
-		protected virtual void Awake()
-		{
-			InitializeSingleton();
-		}
+        /// <summary>
+        /// Make sure to call base.Awake() in override if you need awake.
+        /// </summary>
+        protected virtual void Awake()
+        {
+            InitializeSingleton();
+        }
 
-		protected virtual void InitializeSingleton()
-		{
-			if (!Application.isPlaying) return;
+        protected virtual void InitializeSingleton()
+        {
+            if (!Application.isPlaying) return;
 
-			InitializationTime = Time.time;
-			DontDestroyOnLoad(gameObject);
+            InitializationTime = Time.time;
+            DontDestroyOnLoad(gameObject);
 
-			T[] oldInstances = FindObjectsByType<T>(FindObjectsSortMode.None);
-			foreach (T old in oldInstances)
-				if (old.GetComponent<RegulatorSingleton<T>>().InitializationTime < InitializationTime)
-					Destroy(old.gameObject);
+            T[] oldInstances = FindObjectsByType<T>(FindObjectsSortMode.None);
+            foreach (T old in oldInstances)
+                if (old.GetComponent<RegulatorSingleton<T>>().InitializationTime < InitializationTime)
+                    Destroy(old.gameObject);
 
-			if (instance == null) instance = this as T;
-		}
-	}
+            if (instance == null) instance = this as T;
+        }
+    }
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace ImprovedTimers
+namespace ShoelaceStudios.ImprovedTimers.Timers
 {
     public class AdjustableCountdownTimer : CountdownTimer
     {

@@ -9,14 +9,20 @@
       "Language": "en",
       "Speaker": "Mayor",
       "Text": "Welcome to our village, traveler!",
-      "Responses": ["Thank you", "Goodbye"]
+      "Responses": [
+        "Thank you",
+        "Goodbye"
+      ]
     },
     {
       "Id": "greeting",
       "Language": "es",
       "Speaker": "Mayor",
       "Text": "Hola!",
-      "Responses": ["Gracias", "Adios"]
+      "Responses": [
+        "Gracias",
+        "Adios"
+      ]
     }
   ]
 }

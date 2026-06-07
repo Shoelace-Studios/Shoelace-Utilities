@@ -1,33 +1,39 @@
 using System;
 using UnityEngine;
-
-namespace ImprovedTimers {
+namespace ShoelaceStudios.ImprovedTimers.Timers
+{
     /// <summary>
     /// Countdown timer that fires an event every interval until completion.
     /// </summary>
-    public class IntervalTimer : Timer {
-        readonly float interval;
-        float nextInterval;
+    public class IntervalTimer : Timer
+    {
+        private readonly float interval;
+        private float nextInterval;
 
         public Action OnInterval = delegate { };
 
-        public IntervalTimer(float totalTime, float intervalSeconds) : base(totalTime) {
+        public IntervalTimer(float totalTime, float intervalSeconds) : base(totalTime)
+        {
             interval = intervalSeconds;
             nextInterval = totalTime - interval;
         }
 
-        public override void Tick() {
-            if (IsRunning && CurrentTime > 0) {
+        public override void Tick()
+        {
+            if (IsRunning && CurrentTime > 0)
+            {
                 CurrentTime -= Time.deltaTime;
 
                 // Fire interval events as long as thresholds are crossed
-                while (CurrentTime <= nextInterval && nextInterval >= 0) {
+                while (CurrentTime <= nextInterval && nextInterval >= 0)
+                {
                     OnInterval.Invoke();
                     nextInterval -= interval;
                 }
             }
 
-            if (IsRunning && CurrentTime <= 0) {
+            if (IsRunning && CurrentTime <= 0)
+            {
                 CurrentTime = 0;
                 Stop();
             }
@@ -35,12 +41,14 @@ namespace ImprovedTimers {
 
         public override bool IsFinished => CurrentTime <= 0;
 
-        public override void Reset() {
+        public override void Reset()
+        {
             base.Reset();
             nextInterval = initialTime - interval;
         }
 
-        public override void Reset(float newTime) {
+        public override void Reset(float newTime)
+        {
             base.Reset(newTime);
             nextInterval = initialTime - interval;
         }

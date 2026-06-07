@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-namespace ShoelaceStudios
+namespace ShoelaceStudios.Utilities.ObjectPooling
 {
     public class ObjectPool
     {

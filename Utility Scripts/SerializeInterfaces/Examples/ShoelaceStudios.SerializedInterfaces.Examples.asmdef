@@ -1,8 +1,10 @@
 {
-    "name": "ShoelaceStudios.ObjectPooling",
+    "name": "ShoelaceStudios.SerializedInterfaces.Examples",
     "rootNamespace": "ShoelaceStudios",
-    "references": [],
-    "includePlatforms": [],
+    "references": [
+        "GUID:b1f7bd1f5dd732b47a95ef00f989bbd4"
+    ],
+    "includePlatforms": ["Editor"],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

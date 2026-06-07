@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
-
-namespace ImprovedTimers {
-    public abstract class Timer : IDisposable {
+namespace ShoelaceStudios.ImprovedTimers
+{
+    public abstract class Timer : IDisposable
+    {
         public float CurrentTime { get; protected set; }
         public bool IsRunning { get; private set; }
 
@@ -13,13 +14,16 @@ namespace ImprovedTimers {
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };
 
-        protected Timer(float value) {
+        protected Timer(float value)
+        {
             initialTime = value;
         }
 
-        public void Start() {
+        public void Start()
+        {
             CurrentTime = initialTime;
-            if (!IsRunning) {
+            if (!IsRunning)
+            {
                 IsRunning = true;
                 TimerManager.RegisterTimer(this);
                 OnTimerStart.Invoke();
@@ -29,8 +33,10 @@ namespace ImprovedTimers {
         {
             CurrentTime += deltaTimeChange;
         }
-        public void Stop() {
-            if (IsRunning) {
+        public void Stop()
+        {
+            if (IsRunning)
+            {
                 IsRunning = false;
                 TimerManager.DeregisterTimer(this);
                 OnTimerStop.Invoke();
@@ -40,33 +46,47 @@ namespace ImprovedTimers {
         public abstract void Tick();
         public abstract bool IsFinished { get; }
 
-        public void Resume() => IsRunning = true;
-        public void Pause() => IsRunning = false;
+        public void Resume()
+        {
+            IsRunning = true;
+        }
+        public void Pause()
+        {
+            IsRunning = false;
+        }
 
-        public virtual void Reset() => CurrentTime = initialTime;
+        public virtual void Reset()
+        {
+            CurrentTime = initialTime;
+        }
 
-        public virtual void Reset(float newTime) {
+        public virtual void Reset(float newTime)
+        {
             initialTime = newTime;
             Reset();
         }
 
-        bool disposed;
+        private bool disposed;
 
-        ~Timer() {
+        ~Timer()
+        {
             Dispose(false);
         }
 
         // Call Dispose to ensure deregistration of the timer from the TimerManager
         // when the consumer is done with the timer or being destroyed
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected virtual void Dispose(bool disposing)
+        {
             if (disposed) return;
 
-            if (disposing) {
+            if (disposing)
+            {
                 TimerManager.DeregisterTimer(this);
             }
 

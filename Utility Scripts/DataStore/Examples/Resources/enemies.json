@@ -9,28 +9,42 @@
       "Name": "Fred the Goblin",
       "Health": 50,
       "Speed": 3.5,
-      "Abilities": ["Sneak", "Dance"]
+      "Abilities": [
+        "Sneak",
+        "Dance"
+      ]
     },
     {
       "Id": "orc",
       "Name": "Orc named Stu",
       "Health": 150,
       "Speed": 2.0,
-      "Abilities": ["Charge", "Slam"]
+      "Abilities": [
+        "Charge",
+        "Slam"
+      ]
     },
     {
       "Id": "drake",
       "Name": "Fire Drake",
       "Health": 500,
       "Speed": 5.0,
-      "Abilities": ["Fly", "Breathe Fire", "Tail Swipe"]
+      "Abilities": [
+        "Fly",
+        "Breathe Fire",
+        "Tail Swipe"
+      ]
     },
     {
       "Id": "dragon",
       "Name": "Fire Kendrik Lamar",
       "Health": 500,
       "Speed": 5.0,
-      "Abilities": ["Fly", "Breathe Fire", "Tail Swipe"]
+      "Abilities": [
+        "Fly",
+        "Breathe Fire",
+        "Tail Swipe"
+      ]
     }
   ]
 }

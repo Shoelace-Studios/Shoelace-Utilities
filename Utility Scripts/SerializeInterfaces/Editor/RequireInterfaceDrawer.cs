@@ -1,16 +1,17 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using ShoelaceStudios.SerializeInterfaces;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ShoelaceStudios.Utilities.SerializeInterfaces
+namespace ShoelaceStudios.Utilities.SerializeInterfaces.Editor
 {
     [CustomPropertyDrawer(typeof(RequireInterfaceAttribute))]
     public class RequireInterfaceDrawer : PropertyDrawer
     {
-        RequireInterfaceAttribute RequireInterfaceAttribute => (RequireInterfaceAttribute)attribute;
+        private RequireInterfaceAttribute RequireInterfaceAttribute => (RequireInterfaceAttribute)attribute;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -27,11 +28,11 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             }
 
             EditorGUI.EndProperty();
-            var args = new InterfaceArgs(GetTypeOrElementType(fieldInfo.FieldType), requiredInterfaceType);
+            InterfaceArgs args = new(GetTypeOrElementType(fieldInfo.FieldType), requiredInterfaceType);
             InterfaceReferenceUtil.OnGUI(position, property, label, args);
         }
 
-        void DrawArrayField(Rect position, SerializedProperty property, GUIContent label, Type interfaceType)
+        private void DrawArrayField(Rect position, SerializedProperty property, GUIContent label, Type interfaceType)
         {
             property.arraySize = EditorGUI.IntField(
                 new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight),
@@ -40,19 +41,19 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             float yOffset = EditorGUIUtility.singleLineHeight;
             for (int i = 0; i < property.arraySize; i++)
             {
-                var element = property.GetArrayElementAtIndex(i);
-                var elementRect = new Rect(position.x, position.y + yOffset, position.width,
+                SerializedProperty element = property.GetArrayElementAtIndex(i);
+                Rect elementRect = new(position.x, position.y + yOffset, position.width,
                     EditorGUIUtility.singleLineHeight);
                 DrawInterfaceObjectField(elementRect, element, new GUIContent($"Element {i}"), interfaceType);
                 yOffset += EditorGUIUtility.singleLineHeight;
             }
         }
 
-        void DrawInterfaceObjectField(Rect position, SerializedProperty property, GUIContent label, Type interfaceType)
+        private void DrawInterfaceObjectField(Rect position, SerializedProperty property, GUIContent label, Type interfaceType)
         {
-            var oldReference = property.objectReferenceValue;
+            Object oldReference = property.objectReferenceValue;
             Type baseType = GetAssignableBaseType(fieldInfo.FieldType, interfaceType);
-            var newReference = EditorGUI.ObjectField(position, label, oldReference, baseType, true);
+            Object newReference = EditorGUI.ObjectField(position, label, oldReference, baseType, true);
 
             if (newReference != null && newReference != oldReference)
             {
@@ -64,7 +65,7 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             }
         }
 
-        Type GetAssignableBaseType(Type fieldType, Type interfaceType)
+        private Type GetAssignableBaseType(Type fieldType, Type interfaceType)
         {
             Type elementType = fieldType.IsArray
                 ? fieldType.GetElementType()
@@ -80,11 +81,11 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             return typeof(Object);
         }
 
-        void ValidateAndAssignObject(SerializedProperty property, Object newReference, Type interfaceType)
+        private void ValidateAndAssignObject(SerializedProperty property, Object newReference, Type interfaceType)
         {
             if (newReference is GameObject gameObject)
             {
-                var component = gameObject.GetComponent(interfaceType);
+                Component component = gameObject.GetComponent(interfaceType);
                 if (component != null)
                 {
                     property.objectReferenceValue = component;
@@ -101,7 +102,7 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
             property.objectReferenceValue = null;
         }
 
-        Type GetTypeOrElementType(Type type)
+        private Type GetTypeOrElementType(Type type)
         {
             if (type.IsArray) return type.GetElementType();
             if (type.IsGenericType) return type.GetGenericArguments()[0];

@@ -1,29 +1,33 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-namespace ShoelaceStudios.Utilities.SerializeInterfaces
+namespace ShoelaceStudios.Utilities.SerializeInterfaces.Editor
 {
-    public class InterfaceReferenceUtil {
-        static GUIStyle labelStyle;
+    public class InterfaceReferenceUtil
+    {
+        private static GUIStyle labelStyle;
 
-        public static void OnGUI(Rect position, SerializedProperty property, GUIContent label, InterfaceArgs args) {
+        public static void OnGUI(Rect position, SerializedProperty property, GUIContent label, InterfaceArgs args)
+        {
             InitializeStyleIfNeeded();
-        
-            var controlID = GUIUtility.GetControlID(FocusType.Passive) - 1;
-            var isHovering = position.Contains(Event.current.mousePosition);
-            var displayString = property.objectReferenceValue == null || isHovering ? $"({args.InterfaceType.Name})" : "*";
+
+            int controlID = GUIUtility.GetControlID(FocusType.Passive) - 1;
+            bool isHovering = position.Contains(Event.current.mousePosition);
+            string displayString = property.objectReferenceValue == null || isHovering ? $"({args.InterfaceType.Name})" : "*";
             DrawInterfaceNameLabel(position, displayString, controlID);
         }
 
-        static void DrawInterfaceNameLabel(Rect position, string displayString, int controlID) {
-            if (Event.current.type == EventType.Repaint) {
+        private static void DrawInterfaceNameLabel(Rect position, string displayString, int controlID)
+        {
+            if (Event.current.type == EventType.Repaint)
+            {
                 const int additionalLeftWidth = 3;
                 const int verticalIndent = 1;
-            
-                var content = EditorGUIUtility.TrTextContent(displayString);
-                var size = labelStyle.CalcSize(content);
-                var labelPos = position;
-            
+
+                GUIContent content = EditorGUIUtility.TrTextContent(displayString);
+                Vector2 size = labelStyle.CalcSize(content);
+                Rect labelPos = position;
+
                 labelPos.width = size.x + additionalLeftWidth;
                 labelPos.x += position.width - labelPos.width - 18;
                 labelPos.height -= verticalIndent * 2;
@@ -31,11 +35,13 @@ namespace ShoelaceStudios.Utilities.SerializeInterfaces
                 labelStyle.Draw(labelPos, EditorGUIUtility.TrTextContent(displayString), controlID, DragAndDrop.activeControlID == controlID, false);
             }
         }
-    
-        static void InitializeStyleIfNeeded() {
+
+        private static void InitializeStyleIfNeeded()
+        {
             if (labelStyle != null) return;
-        
-            var style = new GUIStyle(EditorStyles.label) {
+
+            GUIStyle style = new(EditorStyles.label)
+            {
                 font = EditorStyles.objectField.font,
                 fontSize = EditorStyles.objectField.fontSize,
                 fontStyle = EditorStyles.objectField.fontStyle,
