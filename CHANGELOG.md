@@ -3,7 +3,12 @@
 ### Added a basic Debug Wrapper
 ### Formatted code to current Studio Styling
 
+## \[1.6.9] - 2026-08-11
+
+### Added Cinemachine Camera Extensions	
+
 ## \[1.6.2] - 2026-04-07
+
 ### Fixed Build Errors by Culling Editor Code from builds
 
 ## \[1.6.1] - 2026-02-06
