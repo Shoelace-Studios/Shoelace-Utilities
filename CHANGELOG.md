@@ -1,11 +1,18 @@
+## \[1.7.1] - 2026-06-21
+
+### Added Try Get Component for Parents and children.
+
 ## \[1.7.0] - 2026-06-07
+
 ### Added Assembly Defs for example files
+
 ### Added a basic Debug Wrapper
+
 ### Formatted code to current Studio Styling
 
 ## \[1.6.9] - 2026-08-11
 
-### Added Cinemachine Camera Extensions	
+### Added Cinemachine Camera Extensions
 
 ## \[1.6.2] - 2026-04-07
 

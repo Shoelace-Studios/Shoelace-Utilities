@@ -33,6 +33,29 @@ namespace ShoelaceStudios.Utilities.Extensions
             return component;
         }
 
+        public static bool TryGetComponentInParent<T>(this Component component, out T result) where T : Component
+        {
+            result = component.GetComponentInParent<T>();
+            return result != null;
+        }
+        public static bool TryGetComponentInParent<T>(this GameObject gameObject, out T result) where T : Component
+        {
+            result = gameObject.GetComponentInParent<T>();
+            return result != null;
+        }
+
+        public static bool TryGetComponentInChildren<T>(this Component component, out T result) where T : Component
+        {
+            result = component.GetComponent<T>();
+            return result != null;
+        }
+
+        public static bool TryGetComponentInChildren<T>(this GameObject gameObject, out T result) where T : Component
+        {
+            result = gameObject.GetComponentInChildren<T>();
+            return result != null;
+        }
+        
         /// <summary>
         /// Returns the object itself if it exists, null otherwise.
         /// </summary>
